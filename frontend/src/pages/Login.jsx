@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axiosInstance from '../api/axiosInstance';
 import { MessageSquare, ArrowRight, Loader2 } from 'lucide-react';
 
 export default function Login() {
@@ -25,7 +25,7 @@ export default function Login() {
       // We will refine the base URL in an axios instance later, using a relative path for now 
       // mixed with Vite proxy or full URL if known. Let's use standard localhost:5000 for demo.
 
-      const response = await axios.post('http://localhost:5257/api/auth/request-otp', {
+      const response = await axiosInstance.post('/auth/request-otp', {
         whatsAppNumber: phoneNumber
       });
 

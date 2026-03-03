@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axiosInstance from '../api/axiosInstance';
 import { UploadCloud, CheckCircle, FileSpreadsheet, Loader2, LogOut, BarChart3, Activity, Users, Calendar, Download } from 'lucide-react';
 
 export default function Dashboard() {
@@ -34,10 +34,10 @@ export default function Dashboard() {
             const token = localStorage.getItem('token');
             const headers = { Authorization: `Bearer ${token}` };
 
-            const statsRes = await axios.get('http://localhost:5257/api/analytics/dashboard-stats', { headers });
+            const statsRes = await axiosInstance.get('/analytics/dashboard-stats', { headers });
             setStats(statsRes.data);
 
-            const campRes = await axios.get('http://localhost:5257/api/analytics/campaigns', { headers });
+            const campRes = await axiosInstance.get('/analytics/campaigns', { headers });
             setCampaigns(campRes.data);
         } catch (err) {
             console.warn("Error fetching stats, using mock data", err);
@@ -96,7 +96,7 @@ export default function Dashboard() {
                 formData.append('phoneColumnName', phoneColumnName);
                 formData.append('templateName', templateName);
 
-                response = await axios.post('http://localhost:5257/api/campaign/upload', formData, {
+                response = await axiosInstance.post('/campaign/upload', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         ...headers
@@ -106,7 +106,7 @@ export default function Dashboard() {
                 // Parse manual numbers (split by comma or newline)
                 const numbersArray = manualNumbers.split(/[\n,]+/).map(n => n.trim()).filter(n => n !== '');
 
-                response = await axios.post('http://localhost:5257/api/campaign/create-manual', {
+                response = await axiosInstance.post('/campaign/create-manual', {
                     campaignName: campaignName,
                     templateName: templateName,
                     numbers: numbersArray,
@@ -398,7 +398,7 @@ export default function Dashboard() {
                                         </div>
                                         {/* Demo Excel Download Button */}
                                         <a
-                                            href="http://localhost:5257/api/campaign/demo-excel"
+                                            href={`${import.meta.env.VITE_API_BASE_URL}/api/campaign/demo-excel`}
                                             download="demo_contacts.xlsx"
                                             style={{
                                                 display: 'inline-flex',

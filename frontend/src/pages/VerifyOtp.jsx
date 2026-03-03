@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axiosInstance from '../api/axiosInstance';
 import { ShieldCheck, Loader2 } from 'lucide-react';
 
 export default function VerifyOtp() {
@@ -29,7 +29,7 @@ export default function VerifyOtp() {
         setError('');
 
         try {
-            const response = await axios.post('http://localhost:5257/api/auth/verify-otp', {
+            const response = await axiosInstance.post('/auth/verify-otp', {
                 whatsAppNumber: phoneNumber,
                 otp: otp
             });
